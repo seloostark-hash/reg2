@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacktivators • يوم الهاك | Hack Day Registration</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+
+  <!-- Google Fonts: Cairo (Arabic) & Inter (English) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cyan: '#00f0ff',
+              purple: '#8b5cf6',
+              dark: '#070913',
+              card: '#0d1127',
+              border: '#1f294d'
+            }
+          },
+          fontFamily: {
+            sans: ['Cairo', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- External CDN Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Custom cyber glow and theme styles */
+    .neon-glow-cyan {
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+    }
+    .neon-glow-purple {
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
+    }
+    .neon-text-cyan {
+      text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+    }
+    .cyber-grid {
+      background-size: 40px 40px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+    .dark .cyber-grid {
+      background-color: #070913;
+    }
+    .light .cyber-grid {
+      background-color: #f8fafc;
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    }
+    /* Smooth transitions */
+    * {
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+    #printArea { display: none; }
+    @media print {
+      body > *:not(#printArea) { display: none !important; }
+      #printArea { display: block !important; }
+    }
+  </style>
+</head>
+<body class="bg-[#070913] text-slate-100 min-h-screen flex flex-col font-sans cyber-grid selection:bg-cyan-500 selection:text-black">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#070913]/85 dark:bg-[#070913]/90 light:bg-white/90 border-b border-white/10 dark:border-white/10 light:border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo & Team Brand -->
+      <a href="#homeSection" class="flex items-center gap-3.5 group">
+        <div class="relative w-12 h-12 rounded-2xl overflow-hidden p-0.5 bg-gradient-to-tr from-cyan-500 via-purple-500 to-pink-500 neon-glow-cyan group-hover:scale-105 transition-transform">
+          <img src="assets/logo.jpg" alt="Hacktivators Logo" class="w-full h-full object-cover rounded-[14px]">
+        </div>
+        <div>
+          <span class="text-xl sm:text-2xl font-black tracking-tight text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+            <span data-i18n="navBrand">هاكتيفيتورز</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 uppercase font-mono tracking-wider">HACK-DAY</span>
+          </span>
+          <span class="text-[11px] text-slate-400 dark:text-slate-400 light:text-slate-500 block -mt-1 font-medium tracking-wide">Innovation • Technology • Impact</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1.5 lg:gap-3 text-sm font-bold">
+        <a href="#homeSection" data-i18n="navHome" class="px-3 py-2 rounded-xl text-slate-300 hover:text-cyan-400 hover:bg-white/5 transition-all">الرئيسية</a>
+        <a href="#scheduleSection" data-i18n="navSchedule" class="px-3 py-2 rounded-xl text-slate-300 hover:text-cyan-400 hover:bg-white/5 transition-all">الجدول الزمني</a>
+        <a href="#registerSection" data-i18n="navRegister" class="px-3 py-2 rounded-xl text-slate-300 hover:text-cyan-400 hover:bg-white/5 transition-all">التسجيل بالحدث</a>
+        
+        <button id="navStudentPortalBtn" onclick="window.hackApp && window.hackApp.showStudentPortalOrLogin()" class="px-3 py-2 rounded-xl text-slate-300 hover:text-purple-400 hover:bg-white/5 transition-all flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-user-graduate text-purple-400"></i>
+          <span data-i18n="navStudentPortal">حساب الطالب</span>
+          <span id="navUserBadge" class="hidden text-xs px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 border border-purple-500/40"></span>
+        </button>
+
+        <button id="navAdminBtn" onclick="window.hackApp && window.hackApp.showAdminSection()" class="px-3 py-2 rounded-xl text-slate-300 hover:text-cyan-400 hover:bg-white/5 transition-all flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-shield-halved text-cyan-400"></i>
+          <span data-i18n="navAdmin">لوحة الإدارة</span>
+        </button>
+      </nav>
+
+      <!-- Action Toggles (Theme & Language) -->
+      <div class="flex items-center gap-2.5">
+        <!-- Language Switcher -->
+        <button id="langToggleBtn" onclick="window.hackApp && window.hackApp.toggleLang()" class="px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-white/10 flex items-center gap-1.5 transition-all cursor-pointer">
+          <i class="fa-solid fa-globe text-cyan-400"></i>
+          <span id="langBtnText">English</span>
+        </button>
+
+        <!-- Theme Switcher (Dark / Light) -->
+        <button id="themeToggleBtn" onclick="window.hackApp && window.hackApp.toggleTheme()" title="Toggle Theme" class="w-10 h-10 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-white/10 flex items-center justify-center transition-all cursor-pointer">
+          <i id="themeIcon" class="fa-solid fa-sun text-yellow-400 text-base"></i>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button onclick="document.getElementById('mobileNav').classList.toggle('hidden')" class="md:hidden w-10 h-10 rounded-xl bg-slate-800 text-slate-200 border border-white/10 flex items-center justify-center">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobileNav" class="hidden md:hidden border-t border-white/10 bg-[#0d1127] px-4 py-4 space-y-2">
+      <a href="#homeSection" data-i18n="navHome" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5">الرئيسية</a>
+      <a href="#scheduleSection" data-i18n="navSchedule" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5">الجدول الزمني</a>
+      <a href="#registerSection" data-i18n="navRegister" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5">التسجيل بالحدث</a>
+      <button onclick="window.hackApp.showStudentPortalOrLogin()" class="w-full text-right px-3 py-2 rounded-lg text-purple-400 hover:bg-white/5 flex items-center justify-between">
+        <span data-i18n="navStudentPortal">حساب الطالب</span>
+        <i class="fa-solid fa-user-graduate"></i>
+      </button>
+      <button onclick="window.hackApp.showAdminSection()" class="w-full text-right px-3 py-2 rounded-lg text-cyan-400 hover:bg-white/5 flex items-center justify-between">
+        <span data-i18n="navAdmin">لوحة الإدارة</span>
+        <i class="fa-solid fa-shield-halved"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="homeSection" class="relative pt-12 pb-20 overflow-hidden">
+    <!-- Glow backdrops -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-cyan-500/20 via-purple-600/25 to-pink-500/15 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Hero Text -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-start">
+          
+          <!-- Upcoming Event Pill -->
+          <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-bold backdrop-blur-md">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+            <span data-i18n="badgeUpcoming">الحدث القادم • يوم الهاك</span>
+            <span class="text-white/40">|</span>
+            <span class="text-purple-300 font-normal">HACK-DAY 2026</span>
+          </div>
+
+          <!-- Main Title -->
+          <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
+            <span data-i18n="heroTitlePrefix">مرحباً بكم في</span><br>
+            <span class="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent neon-text-cyan" data-i18n="heroTitleHighlight">يوم الهاك</span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed" data-i18n="heroSubtitle">
+            مهارات مختلفة • هدف واحد. سجّل الآن للمشاركة في ورش العمل التفاعلية واكتشف شغفك في التقنية والتصميم والابتكار مع فريق هاكتيفيتورز.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+            <a href="#registerSection" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-base shadow-lg shadow-cyan-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 neon-glow-cyan">
+              <i class="fa-solid fa-id-card"></i>
+              <span data-i18n="btnRegisterNow">سجّل الآن في الحدث</span>
+            </a>
+
+            <a href="#scheduleSection" class="px-6 py-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 text-white font-bold text-sm border border-white/10 backdrop-blur-md hover:border-cyan-500/40 transition-all flex items-center gap-2">
+              <i class="fa-regular fa-calendar-check text-cyan-400"></i>
+              <span data-i18n="btnViewSchedule">استعراض الجدول الزمني</span>
+            </a>
+
+            <button id="btnViewOriginalPoster" onclick="window.hackApp && window.hackApp.toggleModal('posterModal', true)" class="px-5 py-4 rounded-2xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 font-bold text-sm border border-purple-500/40 backdrop-blur-md transition-all flex items-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-image"></i>
+              <span data-i18n="btnViewOriginalPoster">عرض البوستر الأصلي</span>
+            </button>
+          </div>
+
+          <!-- Key Event Stats from Official Poster -->
+          <div class="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-white/10">
+            <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-sm">
+              <span class="block text-xs text-slate-400 font-semibold" data-i18n="statDuration">المدة</span>
+              <span class="text-base sm:text-lg font-black text-white" data-i18n="statDurationVal">4 ساعات متواصلة</span>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-sm">
+              <span class="block text-xs text-slate-400 font-semibold" data-i18n="statGroups">المجموعات</span>
+              <span class="text-base sm:text-lg font-black text-cyan-400" data-i18n="statGroupsVal">A • B • C • D</span>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-sm">
+              <span class="block text-xs text-slate-400 font-semibold" data-i18n="statTime">التوقيت</span>
+              <span class="text-base sm:text-lg font-black text-purple-400" data-i18n="statTimeVal">8:00 ص - 12:00 ظ</span>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-sm">
+              <span class="block text-xs text-slate-400 font-semibold" data-i18n="statDate">الموعد</span>
+              <span class="text-base sm:text-lg font-black text-pink-400" data-i18n="statDateVal">يوم الهاك</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hero Graphic with Hacktivators Official Shield Logo -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative w-full max-w-md">
+            
+            <div class="relative rounded-3xl overflow-hidden p-1.5 bg-gradient-to-tr from-cyan-500 via-purple-500 to-pink-500 neon-glow-cyan shadow-2xl">
+              <div class="relative rounded-[22px] overflow-hidden bg-[#0d1127] p-4 flex flex-col items-center text-center">
+                
+                <!-- Logo Image -->
+                <div class="relative w-64 h-64 my-4 flex items-center justify-center">
+                  <img src="assets/logo.jpg" alt="Hacktivators Official Logo" class="w-full h-full object-contain rounded-2xl shadow-xl">
+                </div>
+
+                <!-- Tagline Badge -->
+                <div class="py-2 px-4 rounded-xl bg-black/40 border border-white/10 mb-2">
+                  <span class="text-xs font-mono font-bold text-cyan-400 tracking-wider">HACKTIVATORS OFFICIAL</span>
+                </div>
+                <h3 class="text-xl font-bold text-white">تعلّم • ابنِ • ابتكر • معاً</h3>
+                <p class="text-xs text-slate-400 mt-1">4 ورش تدريبية نوعية في يوم واحد</p>
+
+                <!-- Fast portal access -->
+                <div class="mt-4 w-full flex gap-2">
+                  <button onclick="window.hackApp.showStudentPortalOrLogin()" class="flex-1 py-2.5 px-3 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 text-xs font-bold border border-purple-500/30 transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span data-i18n="btnLoginStudent">دخول حساب الطالب</span>
+                  </button>
+                  <a href="#registerSection" class="flex-1 py-2.5 px-3 rounded-xl bg-cyan-600/30 hover:bg-cyan-600/50 text-cyan-200 text-xs font-bold border border-cyan-500/30 transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>تسجيل فوري</span>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WORKSHOPS PREVIEW SECTION ================= -->
+  <section class="py-16 bg-[#0a0d1d]/70 border-y border-white/5 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-3xl font-black text-white" data-i18n="workshopsHeading">الورش المقدمة</h2>
+        <p class="text-slate-400 text-sm mt-2">ورش عمل تفاعلية مصممة خصيصاً لتطوير مهارات الطلاب في مختلف مجالات التكنولوجيا والابتكار</p>
+      </div>
+
+      <div id="featuredWorkshopsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= DIGITAL INTERACTIVE SCHEDULE ================= -->
+  <section id="scheduleSection" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+            الجدول الرسمي المعتمد
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-white mt-2" data-i18n="scheduleTitle">الجدول الزمني التفاعلي</h2>
+          <p class="text-slate-400 text-sm mt-1 max-w-2xl" data-i18n="scheduleSubtitle">
+            توزيع ورش العمل الأربعة بين المجموعات A و B و C و D على مدار 4 ساعات متتالية بدون فواصل.
+          </p>
+        </div>
+
+        <button id="btnViewOriginalPosterSchedule" onclick="window.hackApp && window.hackApp.toggleModal('posterModal', true)" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-white/10 flex items-center gap-2 self-start md:self-auto cursor-pointer">
+          <i class="fa-solid fa-file-image text-cyan-400"></i>
+          <span data-i18n="viewPosterBtn">معاينة البوستر الرسمي للملتقى</span>
+        </button>
+      </div>
+
+      <!-- Schedule Filter Tabs -->
+      <div class="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-900/80 border border-white/10 max-w-fit mb-8">
+        <button class="schedule-group-tab active-tab px-5 py-2 rounded-xl text-xs font-bold transition-all bg-cyan-500 text-white" data-group="ALL" data-i18n="tabAllGroups">كل المجموعات</button>
+        <button class="schedule-group-tab px-5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all" data-group="A" data-i18n="tabGroupA">المجموعة A</button>
+        <button class="schedule-group-tab px-5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all" data-group="B" data-i18n="tabGroupB">المجموعة B</button>
+        <button class="schedule-group-tab px-5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all" data-group="C" data-i18n="tabGroupC">المجموعة C</button>
+        <button class="schedule-group-tab px-5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all" data-group="D" data-i18n="tabGroupD">المجموعة D</button>
+      </div>
+
+      <!-- Schedule Table Card -->
+      <div class="rounded-3xl border border-white/10 bg-[#0d1127]/90 backdrop-blur-xl shadow-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-right" dir="auto">
+            <thead class="bg-black/40 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-white/10">
+              <tr>
+                <th class="p-4" data-i18n="timeCol">التوقيت</th>
+                <th class="p-4 schedule-col-A" data-i18n="tabGroupA">المجموعة A</th>
+                <th class="p-4 schedule-col-B" data-i18n="tabGroupB">المجموعة B</th>
+                <th class="p-4 schedule-col-C" data-i18n="tabGroupC">المجموعة C</th>
+                <th class="p-4 schedule-col-D" data-i18n="tabGroupD">المجموعة D</th>
+              </tr>
+            </thead>
+            <tbody id="scheduleTableBody">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= REGISTRATION SECTION ================= -->
+  <section id="registerSection" class="py-20 bg-gradient-to-b from-[#070913] via-[#0d1127] to-[#070913] relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-400 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
+          انضم إلى الحدث الآن
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-black text-white mt-2" data-i18n="regTitle">تسجيل حضور الطالب</h2>
+        <p class="text-slate-400 text-sm mt-1" data-i18n="regSubtitle">
+          يرجى تعبئة جميع البيانات المطلوبة بدقة للحصول على بطاقة الحضور الخاصة بك مع رمز الـ QR وتعيين مجموعتك.
+        </p>
+      </div>
+
+      <!-- Registration Card -->
+      <div class="p-6 sm:p-10 rounded-3xl border border-white/10 bg-slate-900/80 backdrop-blur-xl shadow-2xl relative">
+        
+        <!-- Error Alert -->
+        <div id="regErrorAlert" class="hidden mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-300 text-sm flex items-center gap-3">
+          <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+          <span></span>
+        </div>
+
+        <form id="registrationForm" class="space-y-6">
+          <input type="hidden" id="regAvatarData" name="regAvatarData">
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Student Full Name (Required) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <span data-i18n="fieldName">الاسم الكامل</span> <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <i class="fa-solid fa-user absolute right-3.5 top-3.5 text-slate-500 rtl:right-3.5 rtl:left-auto ltr:left-3.5 ltr:right-auto"></i>
+                <input 
+                  type="text" 
+                  name="studentName" 
+                  required 
+                  class="w-full px-10 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                  placeholder="مثال: عبد الرحمن محمد"
+                  data-i18n="fieldNamePlaceholder"
+                >
+              </div>
+            </div>
+
+            <!-- Grade (Required) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <span data-i18n="fieldGrade">الصف الدراسي</span> <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <i class="fa-solid fa-graduation-cap absolute right-3.5 top-3.5 text-slate-500 rtl:right-3.5 rtl:left-auto ltr:left-3.5 ltr:right-auto"></i>
+                <select 
+                  name="studentGrade" 
+                  required 
+                  class="w-full px-10 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                >
+                  <option value="" disabled selected data-i18n="fieldGradeSelect">اختر الصف الدراسي</option>
+                  <option value="Grade 9" data-i18n="grade9">الصف التاسع (Grade 9)</option>
+                  <option value="Grade 10" data-i18n="grade10">الصف العاشر (Grade 10)</option>
+                  <option value="Grade 11" data-i18n="grade11">الصف الحادي عشر (Grade 11)</option>
+                  <option value="Grade 12" data-i18n="grade12">الصف الثاني عشر (Grade 12)</option>
+                  <option value="Other" data-i18n="gradeOther">صف آخر</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- School Name (Required) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <span data-i18n="fieldSchool">اسم المدرسة</span> <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <i class="fa-solid fa-school absolute right-3.5 top-3.5 text-slate-500 rtl:right-3.5 rtl:left-auto ltr:left-3.5 ltr:right-auto"></i>
+                <input 
+                  type="text" 
+                  name="studentSchool" 
+                  required 
+                  class="w-full px-10 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                  placeholder="مثال: مدرسة التكنولوجيا المتقدمة"
+                  data-i18n="fieldSchoolPlaceholder"
+                >
+              </div>
+            </div>
+
+            <!-- Mobile Number (Required) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <span data-i18n="fieldMobile">رقم الجوال / الهاتف</span> <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <i class="fa-solid fa-phone absolute right-3.5 top-3.5 text-slate-500 rtl:right-3.5 rtl:left-auto ltr:left-3.5 ltr:right-auto"></i>
+                <input 
+                  type="tel" 
+                  name="studentMobile" 
+                  required 
+                  class="w-full px-10 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                  placeholder="مثال: 0501234567"
+                  data-i18n="fieldMobilePlaceholder"
+                >
+              </div>
+            </div>
+
+            <!-- Email Address (Required) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <span data-i18n="fieldEmail">البريد الإلكتروني</span> <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <i class="fa-solid fa-envelope absolute right-3.5 top-3.5 text-slate-500 rtl:right-3.5 rtl:left-auto ltr:left-3.5 ltr:right-auto"></i>
+                <input 
+                  type="email" 
+                  name="studentEmail" 
+                  required 
+                  class="w-full px-10 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                  placeholder="مثال: student@example.com"
+                  data-i18n="fieldEmailPlaceholder"
+                >
+              </div>
+            </div>
+
+            <!-- Password for Personal Student Account (Required) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <span data-i18n="fieldPassword">كلمة المرور لحسابك</span> <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <i class="fa-solid fa-lock absolute right-3.5 top-3.5 text-slate-500 rtl:right-3.5 rtl:left-auto ltr:left-3.5 ltr:right-auto"></i>
+                <input 
+                  type="password" 
+                  name="studentPassword" 
+                  required 
+                  class="w-full px-10 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                  placeholder="أدخل كلمة مرور لتسجيل الدخول لاحقاً"
+                  data-i18n="fieldPasswordPlaceholder"
+                >
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Profile Photo Upload (Optional) -->
+          <div class="p-4 rounded-2xl bg-black/30 border border-white/5">
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2" data-i18n="fieldPhoto">
+              الصورة الشخصية (اختياري)
+            </label>
+            <div class="flex items-center gap-4">
+              <input type="file" id="regPhotoInput" accept="image/*" class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-500/20 file:text-cyan-300 hover:file:bg-cyan-500/30 cursor-pointer">
+              
+              <div id="regPhotoPreview" class="hidden flex items-center gap-2">
+                <img id="regPhotoPreviewImg" src="" alt="Preview" class="w-12 h-12 rounded-full object-cover border border-cyan-400">
+                <span class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i> جاهزة</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Note & Submit -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+            <span class="text-xs text-slate-400" data-i18n="allFieldsRequiredNote">جميع الحقول المشار إليها بـ (*) إلزامية.</span>
+            
+            <button 
+              type="submit" 
+              id="regSubmitBtn" 
+              class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm shadow-xl shadow-cyan-500/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 neon-glow-cyan"
+            >
+              <span data-i18n="btnSubmitRegistration">إتمام التسجيل وإنشاء الحساب</span>
+              <i class="fa-solid fa-arrow-right rtl:rotate-180"></i>
+            </button>
+          </div>
+
+          <!-- Already registered link -->
+          <div class="text-center pt-4 border-t border-white/5">
+            <span class="text-xs text-slate-400" data-i18n="alreadyRegistered">مسجل مسبقاً؟</span>
+            <button type="button" onclick="window.hackApp.toggleModal('loginModal', true)" class="text-xs font-bold text-cyan-400 hover:underline ml-1 mr-1" data-i18n="loginHere">
+              سجّل دخولك لحسابك
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STUDENT DASHBOARD / PORTAL ================= -->
+  <section id="studentPortalSection" class="hidden py-16 bg-[#080b18] border-t border-white/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-400 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
+            حساب الطالب
+          </span>
+          <h2 class="text-3xl font-black text-white mt-2" data-i18n="studentPortalTitle">لوحة تحكم الطالب</h2>
+          <p class="text-slate-400 text-sm mt-1" data-i18n="studentPortalSubtitle">متابعة جدولك المخصص، بطاقة الحضور، وتقييم ورش العمل.</p>
+        </div>
+
+        <button id="studentLogoutBtn" onclick="window.hackApp && window.hackApp.logoutStudent()" class="px-4 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs font-bold border border-red-500/30 flex items-center gap-2 self-start sm:self-auto transition-all cursor-pointer">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span data-i18n="logout">تسجيل الخروج</span>
+        </button>
+      </div>
+
+      <!-- Main Profile & QR Card Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+        
+        <!-- Profile Details Card -->
+        <div class="lg:col-span-7 p-6 sm:p-8 rounded-3xl border border-white/10 bg-slate-900/80 backdrop-blur-xl shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-5 mb-6">
+              
+              <!-- Avatar with upload trigger -->
+              <div class="relative group">
+                <img id="portalAvatarImg" src="assets/logo.jpg" alt="Avatar" class="w-20 h-20 rounded-2xl object-cover border-2 border-cyan-400 shadow-lg">
+                <label for="portalChangePhotoInput" class="absolute inset-0 bg-black/60 rounded-2xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <i class="fa-solid fa-camera text-white text-base"></i>
+                  <span class="text-[10px] text-white font-bold mt-1" data-i18n="changePhotoBtn">تغيير</span>
+                </label>
+                <input type="file" id="portalChangePhotoInput" accept="image/*" class="hidden">
+              </div>
+
+              <div>
+                <h3 id="portalStudentName" class="text-2xl font-black text-white">-</h3>
+                <p id="portalStudentSchool" class="text-xs text-slate-400 mt-0.5">-</p>
+                <div class="mt-2 flex flex-wrap items-center gap-2">
+                  <span id="portalAttendanceStatus" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                    <i class="fa-regular fa-clock"></i> في انتظار الحضور
+                  </span>
+                  <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300">
+                    <span data-i18n="fieldGrade">الصف</span>: <span id="portalStudentGrade">-</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Contact & Details Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-black/30 border border-white/5 text-xs text-slate-300">
+              <div>
+                <span class="text-slate-500 block mb-0.5" data-i18n="fieldEmail">البريد الإلكتروني</span>
+                <span id="portalStudentEmail" class="font-mono text-white">-</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block mb-0.5" data-i18n="fieldMobile">رقم الهاتف</span>
+                <span id="portalStudentMobile" class="font-mono text-white">-</span>
+              </div>
+            </div>
+
+            <!-- Group Allocation Callout -->
+            <div class="mt-6 p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-purple-950/60 border border-cyan-500/30 flex items-center justify-between">
+              <div>
+                <span class="text-xs text-cyan-300 font-bold block" data-i18n="myGroupIs">أنت مسجل في المجموعة</span>
+                <h4 class="text-2xl font-black text-white">المجموعة <span id="portalStudentGroup" class="text-cyan-400">-</span></h4>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl border border-cyan-500/40">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Official Attendance QR Pass Card -->
+        <div class="lg:col-span-5 p-6 sm:p-8 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900 via-[#0d1127] to-slate-950 backdrop-blur-xl shadow-2xl flex flex-col items-center text-center">
+          
+          <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2">بطاقة الدخول الرسمية</span>
+          <h4 class="text-lg font-bold text-white mb-4">Official QR Attendance Pass</h4>
+
+          <!-- QR Canvas -->
+          <div class="p-4 rounded-2xl bg-white shadow-xl mb-4 border border-slate-200">
+            <div id="portalQrCanvas" class="flex items-center justify-center"></div>
+          </div>
+
+          <span id="portalQrCodeText" class="font-mono font-bold text-sm text-cyan-400 tracking-wider mb-4">-</span>
+
+          <!-- Pass Actions -->
+          <div class="w-full flex gap-3">
+            <button id="btnDownloadMyPass" onclick="window.hackApp && window.hackApp.currentUser && window.hackApp.downloadPass(window.hackApp.currentUser)" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-xs shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-download"></i>
+              <span data-i18n="btnDownloadPass">تحميل بطاقة الحضور</span>
+            </button>
+            <button id="btnPrintMyPass" onclick="window.print()" class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-white/10 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-print"></i>
+              <span data-i18n="btnPrintPass">طباعة</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Personalized Day Schedule Section -->
+      <div class="mb-14">
+        <div class="mb-6">
+          <h3 class="text-2xl font-black text-white" data-i18n="myScheduleTitle">جدولك المخصص ليوم الهاك</h3>
+          <p class="text-xs text-slate-400 mt-1" data-i18n="myScheduleNote">تنقل حسب التوقيت التالي لحضور ورش العمل الخاصة بمجموعتك:</p>
+        </div>
+        <div id="myScheduleTimeline">
+          <!-- Rendered dynamically for student's group -->
+        </div>
+      </div>
+
+      <!-- Workshop Rating & Review Section (0 to 5 Stars + Comments for all 4 Workshops) -->
+      <div>
+        <div class="mb-6">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-400 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+            رأيك يهمنا
+          </span>
+          <h3 class="text-2xl font-black text-white mt-2" data-i18n="rateWorkshopsTitle">تقييم ورش العمل وترك الملاحظات</h3>
+          <p class="text-xs text-slate-400 mt-1" data-i18n="rateWorkshopsDesc">
+            يمكنك تقييم كل ورشة عمل من 0 إلى 5 نجوم وكتابة تعليقك ورأيك لمساعدتنا في تحسين التجربة القادمة.
+          </p>
+        </div>
+
+        <div id="workshopRatingsContainer">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ADMIN SECTION ================= -->
+  <div id="adminSectionWrapper" class="py-16 bg-[#060811] border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Admin Protected Lock Screen (if not unlocked) -->
+      <div id="adminLockSection" class="max-w-md mx-auto p-8 rounded-3xl border border-white/10 bg-slate-900/90 backdrop-blur-xl shadow-2xl text-center">
+        <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mx-auto mb-4 border border-cyan-500/30 neon-glow-cyan">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 class="text-2xl font-black text-white mb-2" data-i18n="adminLockTitle">تسجيل دخول المسؤول</h3>
+        <p class="text-xs text-slate-400 mb-6">صفحة الإدارة مخصصة فقط لمنظمي فريق هاكتيفيتورز لإدارة حضور الطلاب والوصول إلى كافة البيانات.</p>
+
+        <!-- Error alert -->
+        <div id="adminAuthError" class="hidden mb-4 p-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-300 text-xs"></div>
+
+        <form id="adminUnlockForm" class="space-y-4">
+          <input 
+            type="password" 
+            id="adminPassInput" 
+            required 
+            class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 text-center tracking-widest font-mono"
+            placeholder="أدخل رمز مرور الإدارة"
+            data-i18n="adminPassPlaceholder"
+          >
+          <button 
+            type="submit" 
+            class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm shadow-lg hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-key"></i>
+            <span data-i18n="btnAdminUnlock">دخول لوحة الإدارة</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Admin Unlocked Dashboard -->
+      <div id="adminDashboardSection" class="hidden space-y-12">
+        
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+              منطقة المسؤول
+            </span>
+            <h2 class="text-3xl font-black text-white mt-2" data-i18n="adminTitle">لوحة تحكم الإدارة (Hacktivators Admin)</h2>
+            <p class="text-slate-400 text-sm mt-1" data-i18n="adminSubtitle">إدارة بيانات الطلاب، مسح رموز QR لتسجيل الحضور، ومتابعة إحصائيات وتقييمات الورش.</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button onclick="window.hackApp.toggleModal('supabaseModal', true)" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-bold border border-cyan-500/30 flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-database"></i>
+              <span data-i18n="btnSupabaseSync">إعداد Supabase</span>
+            </button>
+            <button id="adminLogoutBtn" onclick="window.hackApp && window.hackApp.logoutAdmin()" class="px-4 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs font-bold border border-red-500/30 flex items-center gap-2 transition-all cursor-pointer">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              <span data-i18n="btnAdminLogout">خروج من الإدارة</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+          
+          <div class="p-5 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-sm">
+            <span class="block text-xs text-slate-400 font-semibold" data-i18n="statTotalRegistered">إجمالي الطلاب المسجلين</span>
+            <h3 id="statTotalStudentsVal" class="text-3xl font-black text-white mt-1">0</h3>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-900/80 border border-emerald-500/30 backdrop-blur-sm">
+            <span class="block text-xs text-emerald-400 font-semibold" data-i18n="statCheckedIn">الطلاب الحاضرين</span>
+            <h3 id="statAttendedVal" class="text-3xl font-black text-emerald-400 mt-1">0</h3>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-900/80 border border-cyan-500/30 backdrop-blur-sm">
+            <span class="block text-xs text-cyan-400 font-semibold" data-i18n="statAttendanceRate">نسبة الحضور</span>
+            <h3 id="statAttendanceRateVal" class="text-3xl font-black text-cyan-400 mt-1">0%</h3>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-900/80 border border-purple-500/30 backdrop-blur-sm">
+            <span class="block text-xs text-purple-400 font-semibold" data-i18n="statGroupDistribution">توزيع المجموعات</span>
+            <div class="flex items-center gap-2 mt-2 text-xs font-bold">
+              <span class="text-cyan-400">A:<span id="statGroupAVal">0</span></span>
+              <span class="text-purple-400">B:<span id="statGroupBVal">0</span></span>
+              <span class="text-emerald-400">C:<span id="statGroupCVal">0</span></span>
+              <span class="text-amber-400">D:<span id="statGroupDVal">0</span></span>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-900/80 border border-yellow-500/30 backdrop-blur-sm col-span-2 md:col-span-1">
+            <span class="block text-xs text-yellow-400 font-semibold" data-i18n="statAvgRating">متوسط تقييم الورش</span>
+            <h3 id="statAvgRatingVal" class="text-3xl font-black text-yellow-400 mt-1">0.0 ★</h3>
+          </div>
+
+        </div>
+
+        <!-- Live QR Code Camera Scanner Module -->
+        <div class="p-6 sm:p-8 rounded-3xl border border-cyan-500/30 bg-[#0d1127]/90 backdrop-blur-xl shadow-2xl">
+          <div class="max-w-2xl mx-auto text-center">
+            
+            <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+              ماسح الحضور الذكي
+            </span>
+            <h3 class="text-2xl font-black text-white mt-2" data-i18n="qrScannerHeading">ماسح رموز الحضور المباشر (Live QR Check-in)</h3>
+            <p class="text-slate-400 text-xs mt-1 mb-6" data-i18n="qrScannerDesc">استخدم كاميرا الجهاز أو ارفع صورة QR لمسح كود الطالب وتسجيل حضوره فورياً بنقرة واحدة.</p>
+
+            <!-- Camera Video Feed Container -->
+            <div id="qrReaderContainer" class="w-full max-w-sm mx-auto rounded-2xl overflow-hidden bg-black/40 border border-white/10 mb-4 min-h-[220px] flex items-center justify-center text-slate-500 text-xs">
+              <span>انقر تشغيل الكاميرا لبدء المسح التلقائي</span>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-6">
+              <button id="btnStartQrScanner" onclick="window.hackApp && window.hackApp.startScanner()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-xs shadow-lg shadow-cyan-500/20 hover:scale-105 transition-all flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-camera"></i>
+                <span data-i18n="btnStartCamera">تشغيل الكاميرا</span>
+              </button>
+
+              <button id="btnStopQrScanner" onclick="window.hackApp && window.hackApp.stopScanner()" class="hidden px-6 py-3 rounded-xl bg-red-600 text-white font-bold text-xs hover:bg-red-700 transition-all flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-stop"></i>
+                <span data-i18n="btnStopCamera">إيقاف الكاميرا</span>
+              </button>
+
+              <label class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-white/10 cursor-pointer transition-all flex items-center gap-2">
+                <i class="fa-solid fa-upload"></i>
+                <span data-i18n="btnUploadQR">مسح QR من صورة</span>
+                <input type="file" id="qrFileInput" accept="image/*" class="hidden">
+              </label>
+            </div>
+
+            <!-- Manual Ticket Code Input -->
+            <div class="max-w-md mx-auto p-3 rounded-2xl bg-black/30 border border-white/5 flex items-center gap-2">
+              <input 
+                type="text" 
+                id="manualCodeInput" 
+                placeholder="أو أدخل كود الطالب يدوياً (مثال: HACK-A-1001)" 
+                class="flex-1 px-4 py-2 rounded-xl bg-slate-900 border border-white/10 text-white text-xs placeholder-slate-500 font-mono focus:outline-none focus:border-cyan-500"
+              >
+              <button id="btnManualCheckin" onclick="window.hackApp && window.hackApp.handleManualCheckin()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-all whitespace-nowrap cursor-pointer">
+                <span data-i18n="btnManualCheckin">تسجيل الحضور</span>
+              </button>
+            </div>
+
+            <!-- Scanner Alert / Feedback -->
+            <div id="scannerFeedbackAlert" class="hidden mt-4 text-left max-w-md mx-auto"></div>
+
+          </div>
+        </div>
+
+        <!-- Students Directory Table Section -->
+        <div class="space-y-4">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-2xl font-black text-white" data-i18n="studentsTableTitle">قائمة الطلاب المسجلين</h3>
+              <p class="text-xs text-slate-400">الوصول الكامل إلى بيانات الطلاب وتقييماتهم للورش وتعديل الحالات.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <button onclick="window.hackApp.toggleModal('manualAddModal', true)" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold shadow-lg hover:scale-105 transition-all flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-user-plus"></i>
+                <span data-i18n="btnAddStudentManual">+ إضافة طالب يدوياً</span>
+              </button>
+
+              <button id="btnExportCsv" onclick="window.hackApp && window.hackApp.exportCSV()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-white/10 transition-all flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-file-excel text-emerald-400"></i>
+                <span data-i18n="btnExportCSV">تصدير CSV / Excel</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Filters Bar -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 rounded-2xl bg-slate-900/60 border border-white/10">
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-slate-500 rtl:right-3.5 rtl:left-auto ltr:left-3.5 ltr:right-auto"></i>
+              <input 
+                type="text" 
+                id="adminSearchInput" 
+                placeholder="ابحث بالاسم، المدرسة، البريد، أو رقم الهاتف..." 
+                class="w-full px-10 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                data-i18n="searchPlaceholder"
+              >
+            </div>
+
+            <select id="adminFilterGroup" class="px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500">
+              <option value="ALL" data-i18n="filterGroupAll">كل المجموعات</option>
+              <option value="A">المجموعة A</option>
+              <option value="B">المجموعة B</option>
+              <option value="C">المجموعة C</option>
+              <option value="D">المجموعة D</option>
+            </select>
+
+            <select id="adminFilterStatus" class="px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500">
+              <option value="ALL" data-i18n="filterStatusAll">كل حالات الحضور</option>
+              <option value="ATTENDED" data-i18n="filterStatusAttended">حاضر فقط</option>
+              <option value="PENDING" data-i18n="filterStatusPending">غير حاضر بعد</option>
+            </select>
+          </div>
+
+          <!-- Table Card -->
+          <div class="rounded-3xl border border-white/10 bg-[#0d1127] shadow-2xl overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-right" dir="auto">
+                <thead class="bg-black/50 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-white/10">
+                  <tr>
+                    <th class="p-3.5" data-i18n="colName">الاسم والرمز</th>
+                    <th class="p-3.5" data-i18n="colGradeSchool">الصف والمدرسة</th>
+                    <th class="p-3.5" data-i18n="colContact">التواصل</th>
+                    <th class="p-3.5" data-i18n="colGroup">المجموعة</th>
+                    <th class="p-3.5" data-i18n="colAttendance">حالة الحضور</th>
+                    <th class="p-3.5" data-i18n="colRatings">تقييم الورش</th>
+                    <th class="p-3.5" data-i18n="colActions">الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody id="adminStudentsTableBody">
+                  <!-- Rendered dynamically by app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-auto py-12 border-t border-white/10 bg-[#05070d] text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 space-y-4">
+      <div class="flex items-center justify-center gap-3">
+        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover">
+        <span class="font-black text-white text-base">HACKTIVATORS</span>
+      </div>
+      <p class="text-sm font-semibold text-cyan-300" data-i18n="footerQuote">جهّز نفسك... الإبتكار بانتظارك! نلتقي في يوم الهاك!</p>
+      <p data-i18n="copyright">جميع الحقوق محفوظة لفريق هاكتيفيتورز © 2026</p>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Registration Confirmed Modal (with Group & QR Pass) -->
+  <div id="regSuccessModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+    <div class="max-w-lg w-full p-6 sm:p-8 rounded-3xl bg-[#0d1127] border border-cyan-500/40 shadow-2xl relative text-center">
+      
+      <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-cyan-500/40 neon-glow-cyan">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+
+      <h3 class="text-2xl font-black text-white mb-1" data-i18n="regSuccessTitle">تم تسجيلك بنجاح في يوم الهاك!</h3>
+      <p class="text-xs text-slate-300 mb-6" data-i18n="regSuccessDesc">تم إنشاء حسابك الشخصي وتعيينك ضمن المجموعة المحددة أدناه. تم إرسال رسالة تأكيد إلكترونية إلى بريدك مع رمز الحضور الخاص بك.</p>
+
+      <!-- Ticket Pass Summary Box -->
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-white/10 text-right mb-6 text-xs space-y-2">
+        <div class="flex justify-between items-center py-1 border-b border-white/5">
+          <span class="text-slate-400" data-i18n="ticketStudentName">اسم الطالب:</span>
+          <span id="successStudentName" class="font-bold text-white text-sm"></span>
+        </div>
+        <div class="flex justify-between items-center py-1 border-b border-white/5">
+          <span class="text-slate-400" data-i18n="fieldEmail">البريد الإلكتروني:</span>
+          <span id="successStudentEmail" class="font-mono text-cyan-300"></span>
+        </div>
+        <div class="flex justify-between items-center py-1 border-b border-white/5">
+          <span class="text-slate-400" data-i18n="fieldSchool">المدرسة:</span>
+          <span id="successStudentSchool" class="text-slate-200"></span>
+        </div>
+        <div class="flex justify-between items-center py-1 border-b border-white/5">
+          <span class="text-slate-400" data-i18n="ticketGroup">المجموعة المعينة:</span>
+          <span class="px-3 py-1 rounded-full font-black text-sm bg-purple-500/30 text-purple-300 border border-purple-500/40">
+            المجموعة <span id="successStudentGroup"></span>
+          </span>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-slate-400">رمز التذكرة (Ticket ID):</span>
+          <span id="successStudentCode" class="font-mono font-bold text-cyan-400 text-sm"></span>
+        </div>
+      </div>
+
+      <!-- QR Code Canvas -->
+      <div class="p-3 rounded-2xl bg-white max-w-[200px] mx-auto mb-6 shadow-xl">
+        <div id="successQrCanvas" class="flex justify-center items-center"></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-3">
+        <button id="btnDownloadSuccessPass" class="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-solid fa-download"></i>
+          <span data-i18n="btnDownloadPass">تحميل بطاقة الحضور</span>
+        </button>
+
+        <button id="btnPrintSuccessPass" class="w-full sm:w-auto py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-white/10 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-print"></i>
+          <span data-i18n="btnPrintPass">طباعة</span>
+        </button>
+
+        <button id="btnSuccessToPortal" class="w-full sm:flex-1 py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span data-i18n="btnGoToProfile">الانتقال إلى لوحة حسابك</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. Student Login Modal -->
+  <div id="loginModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+    <div class="max-w-md w-full p-6 sm:p-8 rounded-3xl bg-[#0d1127] border border-white/10 shadow-2xl relative text-center">
+      
+      <button onclick="window.hackApp.toggleModal('loginModal', false)" class="absolute top-5 right-5 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mx-auto mb-4 border border-purple-500/30">
+        <i class="fa-solid fa-user-graduate"></i>
+      </div>
+
+      <h3 class="text-2xl font-black text-white mb-1" data-i18n="btnLoginStudent">تسجيل دخول طالب</h3>
+      <p class="text-xs text-slate-400 mb-6">أدخل بريدك الإلكتروني وكلمة المرور للوصول إلى حسابك وجدولك وتقييم الورش.</p>
+
+      <div id="loginErrorAlert" class="hidden mb-4 p-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-300 text-xs"></div>
+
+      <form id="studentLoginForm" class="space-y-4 text-right">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="fieldEmail">البريد الإلكتروني</label>
+          <input 
+            type="email" 
+            name="loginEmail" 
+            required 
+            class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-500"
+            placeholder="student@example.com"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="fieldPassword">كلمة المرور</label>
+          <input 
+            type="password" 
+            name="loginPassword" 
+            required 
+            class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-500"
+            placeholder="أدخل كلمة المرور"
+          >
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-sm shadow-lg hover:scale-102 transition-all flex items-center justify-center gap-2"
+        >
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span data-i18n="login">تسجيل الدخول</span>
+        </button>
+      </form>
+
+      <div class="mt-6 text-xs text-slate-400">
+        <span>ليس لديك حساب بعد؟</span>
+        <a href="#registerSection" onclick="window.hackApp.toggleModal('loginModal', false)" class="text-cyan-400 font-bold ml-1 hover:underline">سجّل الآن في الحدث</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. Manual Add Student Modal (Admin) -->
+  <div id="manualAddModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+    <div class="max-w-lg w-full p-6 sm:p-8 rounded-3xl bg-[#0d1127] border border-white/10 shadow-2xl relative text-right">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+        <h3 class="text-xl font-black text-white" data-i18n="modalAddTitle">إضافة طالب جديد يدوياً بواسطة الإدارة</h3>
+        <button onclick="window.hackApp.toggleModal('manualAddModal', false)" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="manualAddStudentForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="fieldName">الاسم الكامل *</label>
+          <input type="text" name="manualName" required class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-sm">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="fieldGrade">الصف *</label>
+            <select name="manualGrade" required class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-sm">
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 10" selected>Grade 10</option>
+              <option value="Grade 11">Grade 11</option>
+              <option value="Grade 12">Grade 12</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="colGroup">المجموعة *</label>
+            <select name="manualGroup" required class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-sm">
+              <option value="A">المجموعة A</option>
+              <option value="B">المجموعة B</option>
+              <option value="C">المجموعة C</option>
+              <option value="D">المجموعة D</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="fieldSchool">المدرسة *</label>
+          <input type="text" name="manualSchool" required class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="fieldMobile">رقم الهاتف *</label>
+          <input type="tel" name="manualMobile" required class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="fieldEmail">البريد الإلكتروني *</label>
+          <input type="email" name="manualEmail" required class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white text-sm">
+        </div>
+
+        <div class="flex gap-3 pt-4">
+          <button type="submit" class="flex-1 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs" data-i18n="btnSaveStudent">حفظ الطالب</button>
+          <button type="button" onclick="window.hackApp.toggleModal('manualAddModal', false)" class="px-5 py-3 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold" data-i18n="btnCancel">إلغاء</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- 4. Student Details & Ratings Modal (Admin) -->
+  <div id="studentDetailModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+    <div class="max-w-xl w-full p-6 sm:p-8 rounded-3xl bg-[#0d1127] border border-white/10 shadow-2xl relative text-right">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+        <h3 class="text-xl font-black text-white">تفاصيل الطالب وتقييماته للورش</h3>
+        <button onclick="window.hackApp.toggleModal('studentDetailModal', false)" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-4 mb-6">
+        <img id="detailModalPhoto" src="" alt="" class="w-16 h-16 rounded-2xl object-cover border border-cyan-400">
+        <div>
+          <h4 id="detailModalName" class="text-lg font-bold text-white"></h4>
+          <p id="detailModalSchool" class="text-xs text-slate-400"></p>
+          <div class="flex gap-2 mt-1">
+            <span id="detailModalGroup" class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold"></span>
+            <span id="detailModalStatus" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3 rounded-xl bg-slate-900 border border-white/5 text-xs text-slate-300 space-y-1 mb-6">
+        <div><span class="text-slate-500">Email:</span> <span id="detailModalEmail" class="font-mono text-white"></span></div>
+        <div><span class="text-slate-500">Phone:</span> <span id="detailModalMobile" class="font-mono text-white"></span></div>
+        <div><span class="text-slate-500">Ticket Token:</span> <span id="detailModalToken" class="font-mono text-cyan-400"></span></div>
+      </div>
+
+      <h5 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-3">تقييمات ورش العمل والملاحظات:</h5>
+      <div id="detailModalRatingsList" class="space-y-3 max-h-60 overflow-y-auto pr-1"></div>
+
+    </div>
+  </div>
+
+  <!-- 5. Original Poster Viewer Modal -->
+  <div id="posterModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md items-center justify-center p-4">
+    <div class="max-w-2xl w-full p-4 rounded-3xl bg-[#0d1127] border border-cyan-500/30 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-file-image text-cyan-400"></i>
+          <span>البوستر الرسمي المعتمد • يوم الهاك</span>
+        </h4>
+        <button onclick="window.hackApp.toggleModal('posterModal', false)" class="text-slate-400 hover:text-white px-2 py-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="max-h-[80vh] overflow-y-auto rounded-2xl border border-white/10">
+        <img src="assets/schedule-poster.jpg" alt="Official Hack-Day Poster" class="w-full h-auto object-contain">
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Supabase Connection & SQL Setup Modal -->
+  <div id="supabaseModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md items-center justify-center p-4">
+    <div class="max-w-2xl w-full p-6 sm:p-8 rounded-3xl bg-[#0d1127] border border-emerald-500/30 shadow-2xl relative text-right">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+        <div class="flex items-center gap-3">
+          <span class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg border border-emerald-500/30">
+            <i class="fa-solid fa-database"></i>
+          </span>
+          <div>
+            <h3 class="text-lg font-black text-white" data-i18n="supabaseModalTitle">إعداد ومزامنة قاعدة بيانات Supabase</h3>
+            <span class="text-xs text-emerald-400 font-semibold" data-i18n="supabaseStatusConnected">متصل بحساب Supabase بنجاح</span>
+          </div>
+        </div>
+
+        <button onclick="window.hackApp.toggleModal('supabaseModal', false)" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-300 mb-3" data-i18n="supabaseInstruction">
+        انسخ كود SQL التالي والصقه في Supabase SQL Editor لإنشاء الجداول وسياسات الأمان تلقائياً:
+      </p>
+
+      <div class="relative mb-4">
+        <textarea 
+          id="sqlSnippetArea" 
+          readonly 
+          rows="8" 
+          class="w-full p-3 rounded-xl bg-black/60 border border-white/10 text-emerald-300 font-mono text-[11px] leading-relaxed focus:outline-none"
+        >-- Create Students Table
+CREATE TABLE IF NOT EXISTS public.students (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    name TEXT NOT NULL,
+    grade TEXT NOT NULL,
+    school TEXT NOT NULL,
+    mobile TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT,
+    group_name TEXT NOT NULL,
+    qr_code_token TEXT UNIQUE NOT NULL,
+    avatar_url TEXT,
+    attended BOOLEAN DEFAULT false,
+    attended_at TIMESTAMP WITH TIME ZONE
+);
+
+-- Create Workshop Ratings Table
+CREATE TABLE IF NOT EXISTS public.workshop_ratings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    student_id UUID REFERENCES public.students(id) ON DELETE CASCADE,
+    student_email TEXT NOT NULL,
+    workshop_id TEXT NOT NULL,
+    rating INTEGER CHECK (rating >= 0 AND rating <= 5),
+    comment TEXT,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    UNIQUE(student_id, workshop_id)
+);
+
+ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.workshop_ratings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public all students" ON public.students FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all ratings" ON public.workshop_ratings FOR ALL TO anon USING (true) WITH CHECK (true);</textarea>
+      </div>
+
+      <button 
+        type="button" 
+        onclick="navigator.clipboard.writeText(document.getElementById('sqlSnippetArea').value); alert(window.hackApp.t('sqlCopied'))" 
+        class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2"
+      >
+        <i class="fa-solid fa-copy"></i>
+        <span data-i18n="btnCopySQL">نسخ استعلام SQL</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Core Application Bundle (Runs seamlessly on both http:// and file://) -->
+  <script src="app-bundle.js"></script>
+
+</body>
+</html>

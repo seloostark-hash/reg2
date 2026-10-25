@@ -1,0 +1,19 @@
+{
+  "name": "hacktivators-event-platform",
+  "version": "1.0.0",
+  "description": "Official Hacktivators Team Hack-Day Event Registration & Attendance Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "hacktivators",
+    "supabase",
+    "qr-code",
+    "event-registration",
+    "hack-day"
+  ],
+  "author": "Hacktivators Team",
+  "license": "MIT"
+}
